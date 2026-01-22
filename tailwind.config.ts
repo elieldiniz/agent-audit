@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -19,6 +20,10 @@ export default {
           error: "#ef4444", // red-500
           warning: "#f59e0b", // amber-500
         },
+        "background-light": "#f5f7f8",
+        "background-dark": "#020617",
+        "card-dark": "#0F172A",
+        "input-dark": "#1E293B",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -30,8 +35,8 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "#1E40AF",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#0da2e7",
+          foreground: "#ffffff",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -59,21 +64,25 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        "background-light": "#F8FAFC",
-        "background-dark": "#020617",
-        "card-dark": "#0F172A",
         "accent-blue": "#0EA5E9",
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         display: ["Inter", "sans-serif"],
       },
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+        "2xl": "1rem",
+        full: "9999px",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        "ai-glow": "0 0 20px rgba(13, 162, 231, 0.4)",
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate],
 } satisfies Config;
