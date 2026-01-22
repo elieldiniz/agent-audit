@@ -1,15 +1,15 @@
-// src/interface-adapters/actions/auditActions.ts
 'use server'
+
+import { revalidatePath } from "next/cache";
 
 import { AnalyzeDependencyUseCase } from "../../application/use-cases/AnalyzeDependencyUseCase";
 import { CheckQuotaUseCase } from "../../application/use-cases/CheckQuotaUseCase";
+import { AnalyzeDependencyInputDTO } from "../../application/dtos/AuditDTOs";
+
 import { SupabaseAuditRepository } from "../../infrastructure/repositories/SupabaseAuditRepository";
 import { SupabaseLogRepository } from "../../infrastructure/repositories/SupabaseLogRepository";
 import { SupabaseQuotaRepository } from "../../infrastructure/repositories/SupabaseQuotaRepository";
 import { OpenAIService } from "../../infrastructure/adapters/openai/OpenAIService";
-import { AnalyzeDependencyInputDTO } from "../../application/dtos/AuditDTOs";
-import { revalidatePath } from "next/cache";
-
 import { createClient } from "../../infrastructure/adapters/supabase/server";
 
 export async function analyzeProjectDependenciesAction(formData: FormData) {
@@ -29,10 +29,11 @@ export async function analyzeProjectDependenciesAction(formData: FormData) {
 
   const dependencies = JSON.parse(dependenciesRaw);
 
-  // Dependency Injection per request
+  // 🔹 Dependency Injection per request (correto)
   const auditRepository = new SupabaseAuditRepository(supabase);
   const logRepository = new SupabaseLogRepository(supabase);
   const quotaRepository = new SupabaseQuotaRepository(supabase);
+
   const checkQuotaUseCase = new CheckQuotaUseCase(quotaRepository);
   const aiService = new OpenAIService();
 
@@ -47,7 +48,7 @@ export async function analyzeProjectDependenciesAction(formData: FormData) {
   const input: AnalyzeDependencyInputDTO = {
     projectName,
     dependencies,
-    profileId: user.id
+    profileId: user.id,
   };
 
   const result = await analyzeDependencyUseCase.execute(input);
