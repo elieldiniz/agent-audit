@@ -2,6 +2,7 @@
 import { IAgentRepository, ISkillRepository } from "../ports/IAgentSkillRepositories";
 import { Agent } from "../../domain/entities/Agent";
 import { ILogRepository } from "../ports/ILogRepository";
+import { SkillType } from "../../domain/entities/Skill";
 
 export interface RegisterAgentInputDTO {
   ownerId: string;
@@ -9,7 +10,7 @@ export interface RegisterAgentInputDTO {
   description: string;
   skills?: Array<{
     name: string;
-    type: string;
+    type: SkillType;
     configuration: Record<string, any>;
   }>;
 }
