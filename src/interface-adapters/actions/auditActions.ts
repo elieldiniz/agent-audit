@@ -1,29 +1,17 @@
-// src/interface-adapters/actions/auditActions.ts
 'use server'
 
+import { revalidatePath } from "next/cache";
+
 import { AnalyzeDependencyUseCase } from "../../application/use-cases/AnalyzeDependencyUseCase";
+import { CheckQuotaUseCase } from "../../application/use-cases/CheckQuotaUseCase";
+import { AnalyzeDependencyInputDTO } from "../../application/dtos/AuditDTOs";
+
 import { SupabaseAuditRepository } from "../../infrastructure/repositories/SupabaseAuditRepository";
 import { SupabaseLogRepository } from "../../infrastructure/repositories/SupabaseLogRepository";
 import { SupabaseQuotaRepository } from "../../infrastructure/repositories/SupabaseQuotaRepository";
 import { OpenAIService } from "../../infrastructure/adapters/openai/OpenAIService";
-import { CheckQuotaUseCase } from "../../application/use-cases/CheckQuotaUseCase";
-import { AnalyzeDependencyInputDTO } from "../../application/dtos/AuditDTOs";
-import { revalidatePath } from "next/cache";
-
 import { createClient } from "../../infrastructure/adapters/supabase/server";
 
-/**
- * Orchestrates analysis of a project's dependencies from submitted form data.
- *
- * Validates the authenticated user and required form fields, constructs per-request
- * repositories and services, executes the AnalyzeDependencyUseCase, triggers revalidation
- * of the audits dashboard path, and returns the use case result.
- *
- * @param formData - FormData containing `projectName` (string) and `dependencies` (JSON string)
- * @returns The analysis result produced by the AnalyzeDependencyUseCase
- * @throws Error with message "Unauthorized" if there is no authenticated user
- * @throws Error with message "Missing required fields" if `projectName` or `dependencies` are absent
- */
 export async function analyzeProjectDependenciesAction(formData: FormData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -41,16 +29,17 @@ export async function analyzeProjectDependenciesAction(formData: FormData) {
 
   const dependencies = JSON.parse(dependenciesRaw);
 
-  // Dependency Injection per request
+  // 🔹 Dependency Injection per request (correto)
   const auditRepository = new SupabaseAuditRepository(supabase);
   const logRepository = new SupabaseLogRepository(supabase);
-  const aiService = new OpenAIService();
   const quotaRepository = new SupabaseQuotaRepository(supabase);
+
   const checkQuotaUseCase = new CheckQuotaUseCase(quotaRepository);
-  
+  const aiService = new OpenAIService();
+
   const analyzeDependencyUseCase = new AnalyzeDependencyUseCase(
-    auditRepository, 
-    aiService, 
+    auditRepository,
+    aiService,
     logRepository,
     quotaRepository,
     checkQuotaUseCase
@@ -59,7 +48,7 @@ export async function analyzeProjectDependenciesAction(formData: FormData) {
   const input: AnalyzeDependencyInputDTO = {
     projectName,
     dependencies,
-    profileId: user.id
+    profileId: user.id,
   };
 
   const result = await analyzeDependencyUseCase.execute(input);

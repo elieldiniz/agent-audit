@@ -2,12 +2,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-/**
- * Ensures the Supabase auth session is synchronized with the incoming request cookies and redirects unauthenticated dashboard requests to the login page.
- *
- * @param request - Incoming Next.js request whose headers and cookies are used to update session state.
- * @returns A NextResponse that is either a redirect to `/login` for unauthenticated requests targeting `/dashboard`, or a response preserving the incoming request headers and any cookie updates made during session synchronization.
- */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
     request: {
