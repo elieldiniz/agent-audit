@@ -4,7 +4,9 @@
 import { AnalyzeDependencyUseCase } from "../../application/use-cases/AnalyzeDependencyUseCase";
 import { SupabaseAuditRepository } from "../../infrastructure/repositories/SupabaseAuditRepository";
 import { SupabaseLogRepository } from "../../infrastructure/repositories/SupabaseLogRepository";
+import { SupabaseQuotaRepository } from "../../infrastructure/repositories/SupabaseQuotaRepository";
 import { OpenAIService } from "../../infrastructure/adapters/openai/OpenAIService";
+import { CheckQuotaUseCase } from "../../application/use-cases/CheckQuotaUseCase";
 import { AnalyzeDependencyInputDTO } from "../../application/dtos/AuditDTOs";
 import { revalidatePath } from "next/cache";
 
@@ -43,7 +45,16 @@ export async function analyzeProjectDependenciesAction(formData: FormData) {
   const auditRepository = new SupabaseAuditRepository(supabase);
   const logRepository = new SupabaseLogRepository(supabase);
   const aiService = new OpenAIService();
-  const analyzeDependencyUseCase = new AnalyzeDependencyUseCase(auditRepository, aiService, logRepository);
+  const quotaRepository = new SupabaseQuotaRepository(supabase);
+  const checkQuotaUseCase = new CheckQuotaUseCase(quotaRepository);
+  
+  const analyzeDependencyUseCase = new AnalyzeDependencyUseCase(
+    auditRepository, 
+    aiService, 
+    logRepository,
+    quotaRepository,
+    checkQuotaUseCase
+  );
 
   const input: AnalyzeDependencyInputDTO = {
     projectName,

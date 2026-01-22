@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Function checks
+      run: |
+        # Optional: check if supabase functions compile if deno is installed
+        # But for now let's focus on Next.js app
+        echo "Skipping Deno checks for now"
+
+    - name: Lint
+      run: npm run lint
+
+    - name: Build
+      run: npm run build
