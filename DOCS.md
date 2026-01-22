@@ -14,11 +14,17 @@ This project follows Clean Architecture principles to ensure scalability, testab
 2. **Auth Check**: Retrieves user from `supabase.auth.getUser()`.
 3. **Dependency Injection**: Instantiates request-scoped repositories and use cases.
 4. **UseCase.execute()**:
-    - `AuditRepository.create()`: Persists a 'pending' audit.
+    - **Quota Check**: `CheckQuotaUseCase.execute()` verifies if the user has enough audits remaining.
+    - `AuditRepository.create()`: Persists a 'pending' audit including the input `payloadJson`.
     - `LogRepository.log()`: Records the audit creation for observability.
     - `AIService.analyze()`: Calls OpenAI to analyze dependencies.
     - `AuditRepository.updateStatus()`: Updates the audit with results or error.
-5. **Revalidation**: `revalidatePath` updates the UI with new data.
+    - **Quota Consumption**: `QuotaRepository.incrementUsed()` deducts one audit from the user's limit.
+5. **Report Generation**: `GenerateReportUseCase` transforms the raw result into a UI-ready format.
+6. **Revalidation**: `revalidatePath` updates the UI with new data.
+
+## Reprocessing Flow
+Audits can be re-run using `ReprocessAuditUseCase`, which retrieves the `payloadJson` from a previous audit and triggers a fresh `AnalyzeDependencyUseCase` execution.
 
 ## Suggested Improvements & Fallbacks
 - **Quota Exceeded**: Implement a `CheckQuotaUseCase` before starting the audit. Fallback: Show "Upgrade to Pro" UI.

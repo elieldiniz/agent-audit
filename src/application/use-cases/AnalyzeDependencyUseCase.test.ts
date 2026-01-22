@@ -4,12 +4,15 @@ import { AnalyzeDependencyUseCase } from './AnalyzeDependencyUseCase';
 import { IAuditRepository } from '../ports/IAuditRepository';
 import { IAIService } from '../ports/IAIService';
 import { ILogRepository } from '../ports/ILogRepository';
+import { IQuotaRepository } from '../ports/IQuotaRepository';
+import { CheckQuotaUseCase } from './CheckQuotaUseCase';
 
 describe('AnalyzeDependencyUseCase', () => {
   let useCase: AnalyzeDependencyUseCase;
   let mockRepo: IAuditRepository;
   let mockAI: IAIService;
   let mockLog: ILogRepository;
+  let mockQuota: IQuotaRepository;
 
   beforeEach(() => {
     mockRepo = {
@@ -24,7 +27,12 @@ describe('AnalyzeDependencyUseCase', () => {
     mockLog = {
       log: vi.fn().mockResolvedValue(undefined),
     };
-    useCase = new AnalyzeDependencyUseCase(mockRepo, mockAI, mockLog);
+    mockQuota = {
+      getByProfileId: vi.fn().mockResolvedValue({ maxAudits: 5, usedAudits: 0 }),
+      incrementUsed: vi.fn().mockResolvedValue(undefined),
+    };
+    const checkQuotaUseCase = new CheckQuotaUseCase(mockQuota);
+    useCase = new AnalyzeDependencyUseCase(mockRepo, mockAI, mockLog, mockQuota, checkQuotaUseCase);
   });
 
   it('should successfully analyze dependencies', async () => {

@@ -12,7 +12,8 @@ export class SupabaseAuditRepository implements IAuditRepository {
       .insert({
         project_name: audit.projectName,
         profile_id: audit.profileId,
-        status: 'pending'
+        status: 'pending',
+        payload_json: audit.payloadJson
       })
       .select()
       .single();
@@ -44,6 +45,7 @@ export class SupabaseAuditRepository implements IAuditRepository {
       data.status,
       new Date(data.created_at),
       data.report_json,
+      data.payload_json,
       data.error_message
     );
   }
@@ -77,6 +79,7 @@ export class SupabaseAuditRepository implements IAuditRepository {
       d.status,
       new Date(d.created_at),
       d.report_json,
+      d.payload_json,
       d.error_message
     ));
   }
