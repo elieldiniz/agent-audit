@@ -8,7 +8,17 @@ import { ShieldCheck, AlertTriangle, XCircle, Zap } from "lucide-react";
 
 
 
+import { Suspense } from "react";
+
 export default async function DashboardPage() {
+  return (
+    <Suspense fallback={<DashboardLoading />}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+async function DashboardContent() {
   const service = new MockDashboardService();
   const data = await service.getDashboardData();
 
@@ -67,6 +77,19 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <AuditTable dependencies={data.analyzedDependencies} />
         <AIInsightCard insight={data.latestInsight} />
+      </div>
+    </div>
+  );
+}
+
+function DashboardLoading() {
+  return (
+    <div className="space-y-8 pb-8 animate-pulse">
+      <div className="h-12 w-1/3 bg-slate-200 dark:bg-slate-800 rounded mb-4" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-32 bg-slate-100 dark:bg-slate-900 rounded-xl" />
+        ))}
       </div>
     </div>
   );
