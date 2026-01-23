@@ -1,6 +1,6 @@
 // supabase/functions/stripe-webhook/index.ts
-import { serve } from "std/http/server.ts"
-import Stripe from "stripe"
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import Stripe from "https://esm.sh/stripe@11.1.0?target=deno"
 import { getAdminClient } from "../_shared/utils.ts"
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {

@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { RegisterAgentUseCase } from './RegisterAgentUseCase';
 import { IAgentRepository, ISkillRepository } from '../ports/IAgentSkillRepositories';
 import { ILogRepository } from '../ports/ILogRepository';
+import { SkillType } from '../../domain/entities/Skill';
 
 describe('RegisterAgentUseCase', () => {
   let useCase: RegisterAgentUseCase;
@@ -31,7 +32,7 @@ describe('RegisterAgentUseCase', () => {
       ownerId: 'user-1',
       name: 'Agent X',
       description: 'Desc',
-      skills: [{ name: 'Skill 1', type: 'type1', configuration: {} }]
+      skills: [{ name: 'Skill 1', type: SkillType.SECURITY_AUDIT, configuration: {} }]
     };
 
     const result = await useCase.execute(input);
