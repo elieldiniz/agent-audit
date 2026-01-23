@@ -6,7 +6,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, current: true },
   { name: 'Auditorias', href: '#', icon: Search, current: false },
   { name: 'Relatórios', href: '#', icon: FileText, current: false },
-  { name: 'Configurações', href: '#', icon: Settings, current: false },
+  { name: 'Perfil', href: '/dashboard/profile', icon: Settings, current: false },
   { name: 'Administração', href: '#', icon: ShieldCheck, current: false },
 ];
 
