@@ -59,10 +59,20 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // If no session and trying to access dashboard, redirect to login
-  if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
+  const isAuthPage = request.nextUrl.pathname.startsWith('/auth')
+  const isDashboardPage = request.nextUrl.pathname.startsWith('/dashboard')
+
+  // 1. Unauthenticated -> Dashboard -> Login
+  if (!user && isDashboardPage) {
     const url = request.nextUrl.clone();
     url.pathname = '/auth/login';
+    return NextResponse.redirect(url);
+  }
+
+  // 2. Authenticated -> Auth Pages -> Dashboard
+  if (user && isAuthPage) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }
 
