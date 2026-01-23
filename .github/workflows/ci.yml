@@ -19,7 +19,7 @@ jobs:
         node-version: '20'
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install install
       run: npm ci
 
     - name: Function checks
