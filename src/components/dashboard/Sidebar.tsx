@@ -9,6 +9,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Auditorias', href: '/dashboard/audit', icon: Search },
   { name: 'Relatórios', href: '#', icon: FileText },
+  { name: 'Perfil', href: '/dashboard/profile', icon: Settings, current: false },
   { name: 'Configurações', href: '#', icon: Settings },
   { name: 'Administração', href: '#', icon: ShieldCheck },
 ];
