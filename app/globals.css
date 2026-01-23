@@ -31,7 +31,7 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 220 83% 4.5%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -64,5 +64,20 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .textured-bg {
+    background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+    position: relative;
+  }
+  .textured-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCVwqWxvnYvyCeDuKGCyDm6MKDaTyKBjJ5r1KSPu92Qc1s0uynTUPEo816u9_X8FSZ3ZtZ41vn_YPmpM9WS8fviBodF74oTGOl160gnFMD235g8T9uLwhnG2vkN-DKdM-0kg76KKoGtuDDeTYwF2zaAuz2YiDwpAH2f_XZmnCaE1L3wtmRVEX5BfJQYvN5EbjI7t8u-sKUqCr7P0hr9KeWBLF6o-y3DTdPyozFTlPPKGBbcCrt2CHNzMAjdaydhg4fBTPyQwBVA6Lw);
+    opacity: 0.03;
+    pointer-events: none;
   }
 }
