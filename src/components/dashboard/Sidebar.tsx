@@ -28,8 +28,9 @@ export function Sidebar() {
             className={cn(
               "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors group",
               item.current
-                ? "bg-primary text-white"
+                ? "bg-purple-neon text-white shadow-ai-glow"
                 : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+
             )}
           >
             <item.icon className={cn("w-5 h-5", item.current ? "text-white" : "text-slate-500 group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200")} />

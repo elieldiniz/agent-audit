@@ -35,9 +35,14 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "#0da2e7",
+          DEFAULT: "#3b82f6", // Blue vibrant
           foreground: "#ffffff",
         },
+        "purple-neon": {
+          DEFAULT: "#BC62FF",
+          glow: "#A855F7",
+        },
+
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -80,7 +85,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        "ai-glow": "0 0 20px rgba(13, 162, 231, 0.4)",
+        "ai-glow": "0 0 20px rgba(188, 98, 255, 0.4)",
+        "blue-glow": "0 0 20px rgba(59, 130, 246, 0.4)",
       },
     },
   },

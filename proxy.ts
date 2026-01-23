@@ -5,6 +5,11 @@ export async function middleware(request: NextRequest) {
   return await updateSession(request)
 }
 
+// Support for potential proxy.ts convention
+export async function proxy(request: NextRequest) {
+  return await middleware(request)
+}
+
 export const config = {
   matcher: [
     /*
