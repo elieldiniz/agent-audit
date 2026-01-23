@@ -1,42 +1,72 @@
-import { redirect } from "next/navigation";
+import { MockDashboardService } from "@/infrastructure/services/MockDashboardService";
+import { StatCard } from "@/components/dashboard/StatCard";
+import { AuditChart } from "@/components/dashboard/AuditChart";
+import { AlertList } from "@/components/dashboard/AlertList";
+import { AuditTable } from "@/components/dashboard/AuditTable";
+import { AIInsightCard } from "@/components/dashboard/AIInsightCard";
+import { ShieldCheck, AlertTriangle, XCircle, Zap } from "lucide-react";
 
-import { createClient } from "@/lib/supabase/server";
-import { InfoIcon } from "lucide-react";
-import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
-import { Suspense } from "react";
 
-async function UserDetails() {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getClaims();
 
-  if (error || !data?.claims) {
-    redirect("/auth/login");
-  }
+export default async function DashboardPage() {
+  const service = new MockDashboardService();
+  const data = await service.getDashboardData();
 
-  return JSON.stringify(data.claims, null, 2);
-}
-
-export default function ProtectedPage() {
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
+    <div className="space-y-8 pb-8">
+      <div className="flex justify-between items-end">
+        <div>
+          <h1 className="text-2xl font-bold">Bem-vindo, {data.user.name.split(' ')[0]}!</h1>
+          <p className="text-slate-500 dark:text-slate-400">Painel de Auditoria Inteligente</p>
         </div>
       </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          <Suspense>
-            <UserDetails />
-          </Suspense>
-        </pre>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard 
+          title="Dependências Seguras" 
+          value={data.stats.safeDependencies} 
+          subtext="Atualizadas" 
+          icon={ShieldCheck} 
+          variant="emerald" 
+        />
+        <StatCard 
+          title="Alertas de Risco" 
+          value={data.stats.riskAlerts} 
+          subtext="Potenciais Problemas" 
+          icon={AlertTriangle} 
+          variant="amber" 
+        />
+        <StatCard 
+          title="Falhas Críticas" 
+          value={data.stats.criticalFailures} 
+          subtext="Vulnerabilidades" 
+          icon={XCircle} 
+          variant="red" 
+        />
+        <StatCard 
+          title="Análises da IA" 
+          value={data.stats.aiInsights} 
+          subtext="Insights Gerados" 
+          icon={Zap} 
+          variant="blue" 
+        />
       </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
+
+      {/* Chart & Alerts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 h-full">
+          <AuditChart status={data.auditStatus} />
+        </div>
+        <div className="h-full">
+          <AlertList alerts={data.recentAlerts} />
+        </div>
+      </div>
+
+      {/* Table & AI Insight */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <AuditTable dependencies={data.analyzedDependencies} />
+        <AIInsightCard insight={data.latestInsight} />
       </div>
     </div>
   );

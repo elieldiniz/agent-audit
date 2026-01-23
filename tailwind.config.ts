@@ -30,7 +30,7 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#1E40AF",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -59,11 +59,19 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        "background-light": "#F8FAFC",
+        "background-dark": "#020617",
+        "card-dark": "#0F172A",
+        "accent-blue": "#0EA5E9",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+        display: ["Inter", "sans-serif"],
       },
     },
   },
